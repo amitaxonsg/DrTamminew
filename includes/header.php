@@ -89,6 +89,7 @@ if ($faqs !== []) {
     <meta name="theme-color" content="#981536">
     <link rel="stylesheet" href="<?= e(asset_url('assets/css/site.css')) ?>">
     <link rel="stylesheet" href="<?= e(asset_url('assets/css/redesign.css?v=20260715-1')) ?>">
+    <link rel="stylesheet" href="<?= e(asset_url('assets/css/exact-home.css?v=20260715-2')) ?>">
     <script type="application/ld+json"><?= json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?></script>
     <script src="<?= e(asset_url('assets/js/site.js')) ?>" defer></script>
 </head>
@@ -106,16 +107,19 @@ if ($faqs !== []) {
             <span class="sr-only">Open menu</span><span></span><span></span><span></span>
         </button>
         <nav id="primary-nav" class="primary-nav" aria-label="Primary navigation" data-primary-nav>
-            <a<?= page_is('/about') ? ' aria-current="page"' : '' ?> href="<?= e(site_url('about/')) ?>">About</a>
-            <a<?= page_is('/services') ? ' aria-current="page"' : '' ?> href="<?= e(site_url('services/')) ?>">Services</a>
-            <a<?= page_is('/concerns') ? ' aria-current="page"' : '' ?> href="<?= e(site_url('concerns/')) ?>">Concerns</a>
-            <a<?= page_is('/resources') ? ' aria-current="page"' : '' ?> href="<?= e(site_url('resources/')) ?>">Resources</a>
-            <a<?= page_is('/international-families') ? ' aria-current="page"' : '' ?> href="<?= e(site_url('international-families/')) ?>">International Families</a>
-            <a<?= page_is('/schools-professionals') ? ' aria-current="page"' : '' ?> href="<?= e(site_url('schools-professionals/')) ?>">Schools &amp; Professionals</a>
-            <a<?= page_is('/faq') ? ' aria-current="page"' : '' ?> href="<?= e(site_url('faq/')) ?>">FAQ</a>
-            <a href="<?= e(site_url('contact/')) ?>">Contact</a>
+            <a class="nav-link"<?= page_is('/about') ? ' aria-current="page"' : '' ?> href="<?= e(site_url('about/')) ?>">About</a>
+            <a class="nav-link"<?= page_is('/services') ? ' aria-current="page"' : '' ?> href="<?= e(site_url('services/')) ?>">Services</a>
+            <a class="nav-link"<?= page_is('/concerns') ? ' aria-current="page"' : '' ?> href="<?= e(site_url('concerns/')) ?>">Concerns</a>
+            <a class="nav-link"<?= page_is('/resources') ? ' aria-current="page"' : '' ?> href="<?= e(site_url('resources/')) ?>">Resources</a>
+            <a class="nav-link"<?= page_is('/international-families') ? ' aria-current="page"' : '' ?> href="<?= e(site_url('international-families/')) ?>">International Families</a>
+            <a class="nav-link"<?= page_is('/schools-professionals') ? ' aria-current="page"' : '' ?> href="<?= e(site_url('schools-professionals/')) ?>">Schools &amp; Professionals</a>
+            <a class="nav-link"<?= page_is('/faq') ? ' aria-current="page"' : '' ?> href="<?= e(site_url('faq/')) ?>">FAQ</a>
+            <a class="nav-link"<?= page_is('/contact') ? ' aria-current="page"' : '' ?> href="<?= e(site_url('contact/')) ?>">Contact</a>
         </nav>
-        <a class="button button-primary header-cta" href="<?= e(site_url('contact/')) ?>">Request an Appointment</a>
+        <a class="button button-primary header-cta header-contact" href="<?= e(site_url('contact/')) ?>">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M7 2h2v2h6V2h2v2h3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h3zm13 8H4v10h16zM6 12h4v3H6z"/></svg>
+            <span>Request Appointment</span>
+        </a>
     </div>
 </header>
 <main id="main-content">
