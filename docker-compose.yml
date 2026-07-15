@@ -1,0 +1,27 @@
+services:
+  drtammi-web:
+    build:
+      context: .
+      args:
+        NEXT_PUBLIC_SITE_ENV: ${NEXT_PUBLIC_SITE_ENV:-preview}
+        NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-https://new.drtammiquek.com}
+        NEXT_PUBLIC_KIMI_URL: ${NEXT_PUBLIC_KIMI_URL:-https://www.kimi.com/}
+        NEXT_PUBLIC_ENQUIRY_URL: ${NEXT_PUBLIC_ENQUIRY_URL:-https://drtammiquek.com/paediatrics-clinic/contact/}
+    image: drtammi-next:${IMAGE_TAG:-latest}
+    container_name: drtammi-next
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8088:80"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1/healthz"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    read_only: true
+    tmpfs:
+      - /var/cache/nginx
+      - /var/run
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
