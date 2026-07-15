@@ -1,0 +1,52 @@
+name: Validate Next.js redesign
+
+on:
+  push:
+    branches: [feature/nextjs-redesign]
+  pull_request:
+    branches: [main]
+    paths:
+      - 'app/**'
+      - 'public/**'
+      - 'scripts/**'
+      - 'package.json'
+      - 'next.config.mjs'
+      - 'tsconfig.json'
+      - '.github/workflows/nextjs-build.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: package.json
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Type-check
+        run: npm run typecheck
+
+      - name: Build static website
+        env:
+          NEXT_PUBLIC_SITE_ENV: preview
+          NEXT_PUBLIC_SITE_URL: https://new.drtammiquek.com
+        run: npm run build
+
+      - name: Verify static export
+        run: |
+          test -f out/index.html
+          test -d out/_next
+          grep -q 'noindex' out/index.html
+          echo 'Next.js static export validated.'
