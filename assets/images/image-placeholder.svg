@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">
+  <title id="title">Clinic image placeholder</title>
+  <desc id="desc">Warm burgundy and ivory placeholder used until approved clinic photography is added.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fff8f8"/>
+      <stop offset="1" stop-color="#f2dfe4"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="70%" cy="30%" r="65%">
+      <stop offset="0" stop-color="#ffffff" stop-opacity=".95"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#bg)"/>
+  <rect width="1600" height="1000" fill="url(#glow)"/>
+  <g fill="none" stroke="#981536" stroke-opacity=".12" stroke-width="5">
+    <path d="M-80 220c230-170 355 180 575-7s390 150 640-35 335 138 570-20"/>
+    <path d="M-50 710c210-170 430 150 640-20s390 120 610-30 310 100 470-15"/>
+    <circle cx="260" cy="480" r="145"/>
+    <circle cx="1320" cy="520" r="210"/>
+  </g>
+  <g transform="translate(650 350)" fill="#981536" opacity=".72">
+    <circle cx="55" cy="30" r="28"/>
+    <rect x="34" y="62" width="42" height="115" rx="20"/>
+    <circle cx="180" cy="65" r="22"/>
+    <rect x="164" y="93" width="32" height="86" rx="16"/>
+    <circle cx="-70" cy="70" r="22"/>
+    <rect x="-86" y="98" width="32" height="82" rx="16"/>
+  </g>
+  <text x="800" y="650" text-anchor="middle" fill="#741027" font-family="Georgia, 'Times New Roman', serif" font-size="48">Approved image to be added</text>
+  <text x="800" y="706" text-anchor="middle" fill="#65727b" font-family="Arial, Helvetica, sans-serif" font-size="24">The layout remains complete while clinic photography is prepared.</text>
+</svg>

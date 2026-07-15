@@ -1,0 +1,44 @@
+Options -Indexes
+DirectoryIndex index.php index.html
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+
+# Redirect the social share directory URL to the generated SVG.
+RewriteRule ^assets/images/social-share/?$ assets/images/social-share.svg [L]
+
+# Protect files that should never be public.
+RewriteRule (^|/)\. - [F,L]
+RewriteRule ^(?:storage|includes)/ - [F,L,NC]
+RewriteRule ^(?:composer\.(?:json|lock)|README\.md)$ - [F,L,NC]
+</IfModule>
+
+ErrorDocument 404 /paediatrics-clinic/404.php
+
+<IfModule mod_headers.c>
+Header always set X-Content-Type-Options "nosniff"
+Header always set Referrer-Policy "strict-origin-when-cross-origin"
+Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
+Header always set X-Frame-Options "SAMEORIGIN"
+Header always set Cross-Origin-Opener-Policy "same-origin"
+Header always set Content-Security-Policy "default-src 'self'; img-src 'self' data: https:; style-src 'self'; script-src 'self'; font-src 'self'; connect-src 'self'; frame-src 'self' https://kimi.com https://www.kimi.com; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; upgrade-insecure-requests"
+</IfModule>
+
+<IfModule mod_expires.c>
+ExpiresActive On
+ExpiresByType text/css "access plus 30 days"
+ExpiresByType application/javascript "access plus 30 days"
+ExpiresByType image/svg+xml "access plus 90 days"
+ExpiresByType image/jpeg "access plus 90 days"
+ExpiresByType image/png "access plus 90 days"
+ExpiresByType image/webp "access plus 90 days"
+ExpiresByType image/avif "access plus 90 days"
+</IfModule>
+
+<IfModule mod_deflate.c>
+AddOutputFilterByType DEFLATE text/html text/plain text/css application/javascript application/json application/ld+json image/svg+xml
+</IfModule>
+
+<FilesMatch "^(\.env|\.env\..*|composer\.(json|lock)|.*\.log)$">
+Require all denied
+</FilesMatch>

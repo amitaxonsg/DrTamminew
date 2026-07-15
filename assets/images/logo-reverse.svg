@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 145" role="img" aria-labelledby="title desc">
+  <title id="title">Dr Tammi Quek</title>
+  <desc id="desc">Developmental and Behavioural Paediatrics Clinic</desc>
+  <g fill="none" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="42" cy="25" r="12" fill="#ffffff" stroke="none"/>
+    <path d="M42 40v43M42 53l-22 22M42 55l24-19M42 82L26 119M42 82l21 35" stroke-width="10"/>
+    <circle cx="73" cy="27" r="8" fill="#ffffff" stroke="none"/>
+    <path d="M70 35l-9 22M70 36l15 12" stroke-width="7"/>
+  </g>
+  <text x="105" y="70" fill="#ffffff" font-family="Georgia, 'Times New Roman', serif" font-size="57" font-weight="700" font-style="italic">Dr Tammi Quek</text>
+  <path d="M108 87h431" stroke="#f0c9d3" stroke-width="2"/>
+  <text x="108" y="114" fill="#ffffff" font-family="Arial, Helvetica, sans-serif" font-size="18" letter-spacing=".8">DEVELOPMENTAL &amp; BEHAVIOURAL PAEDIATRICS CLINIC</text>
+</svg>

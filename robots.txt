@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /includes/
+Disallow: /storage/
+Disallow: /contact/submit.php
+
+Sitemap: https://drtammiquek.com/paediatrics-clinic/sitemap.xml
