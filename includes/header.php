@@ -88,6 +88,7 @@ if ($faqs !== []) {
     <meta name="twitter:card" content="summary_large_image">
     <meta name="theme-color" content="#981536">
     <link rel="stylesheet" href="<?= e(asset_url('assets/css/site.css')) ?>">
+    <link rel="stylesheet" href="<?= e(asset_url('assets/css/redesign.css?v=20260715-1')) ?>">
     <script type="application/ld+json"><?= json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?></script>
     <script src="<?= e(asset_url('assets/js/site.js')) ?>" defer></script>
 </head>
