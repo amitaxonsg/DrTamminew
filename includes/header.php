@@ -6,6 +6,7 @@ $description = (string) ($page['description'] ?? 'Developmental and behavioural 
 $path = (string) ($page['path'] ?? '');
 $canonical = canonical_url($path);
 $faqs = is_array($page['faqs'] ?? null) ? $page['faqs'] : [];
+$bodyClass = $path === '' ? 'client-approved-home' : 'client-inner-page';
 
 $schema = [
     '@context' => 'https://schema.org',
@@ -88,12 +89,11 @@ if ($faqs !== []) {
     <meta name="twitter:card" content="summary_large_image">
     <meta name="theme-color" content="#981536">
     <link rel="stylesheet" href="<?= e(asset_url('assets/css/site.css')) ?>">
-    <link rel="stylesheet" href="<?= e(asset_url('assets/css/redesign.css?v=20260715-1')) ?>">
-    <link rel="stylesheet" href="<?= e(asset_url('assets/css/exact-home.css?v=20260715-2')) ?>">
+    <link rel="stylesheet" href="<?= e(asset_url('assets/css/client-approved-home.css?v=20260715-3')) ?>">
     <script type="application/ld+json"><?= json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?></script>
     <script src="<?= e(asset_url('assets/js/site.js')) ?>" defer></script>
 </head>
-<body>
+<body class="<?= e($bodyClass) ?>">
 <a class="skip-link" href="#main-content">Skip to main content</a>
 <?php if (!is_production()): ?>
 <div class="preview-notice" role="status">Local preview — enquiries are not emailed and search indexing is disabled.</div>
