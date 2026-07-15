@@ -1,3 +1,7 @@
+'use client';
+
+import { useEffect } from 'react';
+
 type IconName =
   | 'calendar'
   | 'whatsapp'
@@ -47,59 +51,162 @@ function Icon({ name, size = 24 }: { name: IconName; size?: number }) {
   );
 }
 
-const concerns: Array<{ icon: IconName; title: string }> = [
-  { icon: 'autism', title: 'Autism' },
-  { icon: 'brain', title: 'ADHD' },
-  { icon: 'speech', title: 'Speech & Language' },
-  { icon: 'book', title: 'Learning Difficulties' },
-  { icon: 'behaviour', title: 'Behavioural Concerns' },
-  { icon: 'anxiety', title: 'Anxiety' },
+const navigation = [
+  ['About', '#about'],
+  ['Services', '#services'],
+  ['Concerns', '#concerns'],
+  ['Resources', '#resources'],
+  ['International Families', '#international-families'],
+  ['Schools & Professionals', '#schools-professionals'],
+  ['FAQ', '#faq'],
+  ['Contact', '#contact'],
+] as const;
+
+const concerns: Array<{ icon: IconName; title: string; summary: string }> = [
+  { icon: 'autism', title: 'Autism & Social Communication', summary: 'Support for concerns involving social interaction, communication, flexibility and development.' },
+  { icon: 'brain', title: 'ADHD & Attention', summary: 'Assessment and practical guidance for attention, impulsivity and executive functioning concerns.' },
+  { icon: 'speech', title: 'Speech & Language', summary: 'Review of communication development and how language needs may affect daily life and learning.' },
+  { icon: 'book', title: 'Learning Difficulties', summary: 'Understanding learning profiles, school participation and factors affecting educational progress.' },
+  { icon: 'behaviour', title: 'Behavioural Concerns', summary: 'A whole-child view of behaviour, development, family context and environmental demands.' },
+  { icon: 'anxiety', title: 'Anxiety & Emotional Wellbeing', summary: 'Support for emotional regulation, anxiety and social-emotional concerns alongside development.' },
 ];
 
 const assistantQuestions = [
-  ['Does my child need a developmental assessment?', 'Families often enquire when they notice concerns involving development, communication, attention, learning, behaviour or social-emotional wellbeing. A consultation is required before any conclusion can be reached.'],
+  ['Does my child need a developmental assessment?', 'Families often enquire when they notice concerns involving development, communication, attention, learning, behaviour or social-emotional wellbeing. An individual consultation is needed before any conclusion can be reached.'],
   ['What happens during a first consultation?', 'The clinic reviews the child’s history, current concerns and available reports, then discusses suitable next steps with the parent or guardian.'],
   ['Do you help with ADHD or autism concerns?', 'The clinic supports a range of developmental and behavioural concerns. The assessment approach is individualised for each child and family.'],
-];
+] as const;
 
+const faqs = [
+  ['How do I request an appointment?', 'Use the appointment, WhatsApp or telephone options on this page. The clinic team reviews each request before arranging a suitable consultation.'],
+  ['Why can I not select an appointment date immediately?', 'Developmental and behavioural appointments may require different preparation, reports or coordination. The clinic therefore reviews each request before confirming the appropriate appointment.'],
+  ['Can families living outside Singapore enquire?', 'Yes. International families may submit an enquiry before travel so the clinic team can review the circumstances and advise on suitable next steps.'],
+  ['Can the clinic communicate with schools or other professionals?', 'School or professional collaboration may be considered where appropriate, with parent or guardian authorisation and subject to practical availability.'],
+  ['Does the KIMI clinic assistant provide a diagnosis?', 'No. The assistant provides general educational information only and does not diagnose a condition or replace an individual medical consultation.'],
+] as const;
+
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://new.drtammiquek.com';
 const isPreview = process.env.NEXT_PUBLIC_SITE_ENV !== 'production';
+const kimiUrl = process.env.NEXT_PUBLIC_KIMI_URL ?? 'https://www.kimi.com/';
+const enquiryUrl = process.env.NEXT_PUBLIC_ENQUIRY_URL ?? 'https://drtammiquek.com/paediatrics-clinic/contact/';
+
+const clinicSchema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'MedicalClinic',
+      '@id': `${siteUrl}/#clinic`,
+      name: 'Dr Tammi Quek Developmental & Behavioural Paediatrics Clinic',
+      url: `${siteUrl}/`,
+      telephone: '+65 6397 6637',
+      medicalSpecialty: 'Developmental and Behavioural Paediatrics',
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: '10 Sinaran Drive, #10-12 Novena Medical Center',
+        addressLocality: 'Singapore',
+        postalCode: '307506',
+        addressCountry: 'SG',
+      },
+      areaServed: ['Singapore', 'Southeast Asia', 'International families'],
+      knowsAbout: [
+        'Developmental paediatrics',
+        'Behavioural paediatrics',
+        'Autism and social communication concerns',
+        'ADHD and attention concerns',
+        'Speech and language development',
+        'Learning difficulties',
+        'Child and adolescent emotional wellbeing',
+      ],
+    },
+    {
+      '@type': 'WebSite',
+      '@id': `${siteUrl}/#website`,
+      url: `${siteUrl}/`,
+      name: 'Dr Tammi Quek Clinic',
+      inLanguage: 'en-SG',
+    },
+    {
+      '@type': 'WebPage',
+      '@id': `${siteUrl}/#webpage`,
+      url: `${siteUrl}/`,
+      name: 'Developmental & Behavioural Paediatrician Singapore | Dr Tammi Quek',
+      description: 'Developmental and behavioural paediatrics in Singapore for children, adolescents and families with developmental, attention, communication, learning and social-emotional concerns.',
+      isPartOf: { '@id': `${siteUrl}/#website` },
+      about: { '@id': `${siteUrl}/#clinic` },
+      inLanguage: 'en-SG',
+    },
+  ],
+};
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map(([question, answer]) => ({
+    '@type': 'Question',
+    name: question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: answer,
+    },
+  })),
+};
 
 export default function HomePage() {
+  useEffect(() => {
+    const elements = Array.from(document.querySelectorAll<HTMLElement>('[data-reveal]'));
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (reducedMotion || !('IntersectionObserver' in window)) {
+      elements.forEach((element) => element.classList.add('is-visible'));
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' },
+    );
+
+    elements.forEach((element) => observer.observe(element));
+    return () => observer.disconnect();
+  }, []);
+
+  const closeMobileMenu = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    event.currentTarget.closest('details')?.removeAttribute('open');
+  };
+
   return (
-    <main>
+    <main className="siteRoot">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(clinicSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
+
       {isPreview && (
-        <div className="previewBar">Preview site — enquiry delivery is disabled and search indexing is blocked.</div>
+        <div className="previewBar">Preview site — enquiry delivery is handled by the existing clinic form and search indexing is blocked.</div>
       )}
 
       <header className="siteHeader">
         <div className="shell headerInner">
           <a className="brand" href="#top" aria-label="Dr Tammi Quek clinic home">
-            <span className="brandMark" aria-hidden="true"><span /><span /></span>
-            <span className="brandWords">
-              <strong>Dr Tammi Quek</strong>
-              <small>Developmental &amp; Behavioural Paediatrics Clinic</small>
-            </span>
+            <img src="/assets/images/logo.svg" alt="Dr Tammi Quek Developmental and Behavioural Paediatrics Clinic" width="310" height="72" />
           </a>
 
           <nav className="desktopNav" aria-label="Primary navigation">
-            <a href="#about">About <span>⌄</span></a>
-            <a href="#services">Services <span>⌄</span></a>
-            <a href="#conditions">Conditions <span>⌄</span></a>
-            <a href="#resources">Resources <span>⌄</span></a>
-            <a href="#assistant">Ask Dr Tammi <span>⌄</span></a>
+            {navigation.map(([label, href]) => <a key={href} href={href}>{label}</a>)}
           </nav>
 
-          <a className="button buttonPrimary compact" href="#contact"><Icon name="phone" size={18} /> Contact</a>
+          <a className="button buttonPrimary headerCta" href="#contact"><Icon name="calendar" size={18} /> Request an Appointment</a>
 
           <details className="mobileMenu">
-            <summary aria-label="Open navigation"><span /><span /><span /></summary>
-            <nav>
-              <a href="#about">About</a>
-              <a href="#services">Services</a>
-              <a href="#conditions">Conditions</a>
-              <a href="#resources">Resources</a>
-              <a href="#assistant">Ask Dr Tammi</a>
-              <a href="#contact">Contact</a>
+            <summary aria-label="Open navigation menu"><span /><span /><span /></summary>
+            <nav aria-label="Mobile navigation">
+              {navigation.map(([label, href]) => <a key={href} href={href} onClick={closeMobileMenu}>{label}</a>)}
+              <a className="mobileAppointment" href="#contact" onClick={closeMobileMenu}>Request an Appointment</a>
             </nav>
           </details>
         </div>
@@ -109,7 +216,8 @@ export default function HomePage() {
         <div className="decor decorLeft" aria-hidden="true" />
         <div className="decor decorRight" aria-hidden="true" />
         <div className="shell heroGrid">
-          <div className="heroCopy">
+          <div className="heroCopy reveal" data-reveal>
+            <p className="eyebrow">Developmental &amp; behavioural paediatrics in Singapore</p>
             <h1><span>Clarity and support</span> for developmental, behavioural and learning concerns.</h1>
             <p>Evidence-informed assessment and personalised care for children and adolescents—partnering with families every step of the way.</p>
             <div className="heroActions">
@@ -123,18 +231,18 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="portraitWrap" aria-label="Approved current portrait of Dr Tammi Quek">
-            <div className="portraitPhoto" role="img" aria-label="Dr Tammi Quek portrait; approved image loads when supplied" />
+          <div className="portraitWrap reveal revealDelay1" data-reveal aria-label="Approved current portrait of Dr Tammi Quek">
+            <div className="portraitPhoto" role="img" aria-label="Dr Tammi Quek, developmental and behavioural paediatrician in Singapore" />
             <span className="assetNote">Current approved headshot</span>
           </div>
 
-          <aside className="assistantCard" id="assistant" aria-labelledby="assistantTitle">
+          <aside className="assistantCard reveal revealDelay2" id="assistant" data-reveal aria-labelledby="assistantTitle">
             <div className="assistantHead">
               <Icon name="sparkles" size={29} />
-              <div><strong id="assistantTitle">Ask Dr Tammi&apos;s Clinic Assistant</strong><small><span className="onlineDot" /> Educational guide</small></div>
+              <div><strong id="assistantTitle">Ask Dr Tammi&apos;s Clinic Assistant</strong><small><span className="onlineDot" /> KIMI AI educational guide</small></div>
             </div>
             <div className="assistantBody">
-              <p>Get clear, general information about clinic services and the appointment request process.</p>
+              <p>Get clear, general information about clinic services, common concerns and the appointment request process.</p>
               <div className="assistantQuestions">
                 {assistantQuestions.map(([question, answer]) => (
                   <details key={question}>
@@ -143,14 +251,15 @@ export default function HomePage() {
                   </details>
                 ))}
               </div>
-              <div className="assistantSafety"><Icon name="shield" size={24} /><span><strong>Educational information only.</strong> This guide does not diagnose a condition or replace professional medical advice.</span></div>
+              <div className="assistantSafety"><Icon name="shield" size={24} /><span><strong>Educational information only.</strong> This assistant does not diagnose a condition or replace professional medical advice.</span></div>
+              <a className="button buttonPrimary assistantButton" href={kimiUrl} target="_blank" rel="noreferrer"><Icon name="sparkles" size={18} /> Open KIMI Assistant</a>
             </div>
           </aside>
         </div>
       </section>
 
       <section className="trustSection" id="about">
-        <div className="shell trustGrid">
+        <div className="shell trustGrid reveal" data-reveal>
           <article><Icon name="shield" size={34} /><div><strong>Specialist Paediatrician</strong><span>Developmental &amp; Behavioural Paediatrics</span></div></article>
           <article><Icon name="sparkles" size={34} /><div><strong>Individualised Care</strong><span>Guidance based on each child&apos;s needs</span></div></article>
           <article><Icon name="people" size={34} /><div><strong>Family-centred Approach</strong><span>Collaborative, respectful and empowering</span></div></article>
@@ -158,37 +267,88 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="contentSection" id="conditions">
-        <div className="shell concernsPanel">
-          <div className="sectionIntro">
-            <p className="eyebrow">Who we support</p>
-            <h2>Who We Help</h2>
-            <p>We support children, adolescents and young adults with a range of developmental and behavioural concerns.</p>
+      <section className="contentSection aboutSection">
+        <div className="shell aboutGrid">
+          <div className="contentCopy reveal" data-reveal>
+            <p className="eyebrow">About the clinic</p>
+            <h2>A holistic view of each child&apos;s development, learning and wellbeing</h2>
+            <p>Developmental and behavioural paediatrics considers how children and adolescents communicate, learn, regulate attention and emotions, participate socially and manage everyday demands.</p>
+            <p>The clinic works in partnership with families to understand strengths and concerns, consider available information and provide practical, individualised guidance.</p>
+            <a className="textLink" href="#services">Explore clinic services <Icon name="arrow" size={18} /></a>
           </div>
-          <div className="concernGrid">
-            {concerns.map((concern) => (
-              <article className="concernCard" key={concern.title}>
-                <Icon name={concern.icon} size={43} />
-                <strong>{concern.title}</strong>
-              </article>
-            ))}
+          <div className="scenePhoto sceneConsult reveal revealDelay1" data-reveal role="img" aria-label="Illustrative family consultation; no actual patients shown"><span>Illustrative family consultation</span></div>
+        </div>
+      </section>
+
+      <section className="contentSection softSection" id="services">
+        <div className="shell">
+          <div className="sectionIntro reveal" data-reveal>
+            <p className="eyebrow">Clinic services</p>
+            <h2>Assessment, understanding and practical next steps</h2>
+            <p>Care is tailored to the child&apos;s developmental stage, family circumstances and the nature of the concerns raised.</p>
           </div>
-          <div className="scenePhoto sceneConsult" role="img" aria-label="Illustrative family consultation image; approved image loads when supplied">
-            <span>Illustrative family consultation</span>
+          <div className="serviceGrid">
+            <article className="serviceCard reveal" data-reveal><Icon name="clipboard" size={34} /><h3>Developmental Assessment</h3><p>Review of developmental history, current concerns, available reports and the child&apos;s individual profile.</p></article>
+            <article className="serviceCard reveal revealDelay1" data-reveal><Icon name="brain" size={34} /><h3>Attention &amp; Learning</h3><p>Support for attention, executive functioning, learning participation and school-related concerns.</p></article>
+            <article className="serviceCard reveal revealDelay2" data-reveal><Icon name="people" size={34} /><h3>Family Guidance</h3><p>Clear explanations and practical recommendations to help families support the child day to day.</p></article>
+            <article className="serviceCard reveal revealDelay3" data-reveal><Icon name="book" size={34} /><h3>School Collaboration</h3><p>Communication or coordination with schools and professionals where appropriate and authorised.</p></article>
           </div>
         </div>
       </section>
 
-      <section className="contentSection processArea" id="services">
-        <div className="shell storyGrid">
-          <div className="scenePhoto scenePlay" role="img" aria-label="Illustrative developmental activity with family; approved image loads when supplied">
-            <span>Illustrative developmental activity</span>
+      <section className="contentSection" id="concerns">
+        <div className="shell concernsPanel">
+          <div className="sectionIntro reveal" data-reveal>
+            <p className="eyebrow">Who we support</p>
+            <h2>Concerns families commonly bring to the clinic</h2>
+            <p>Every child is considered individually. The examples below are broad areas of concern rather than diagnoses made through a website.</p>
           </div>
+          <div className="concernGrid">
+            {concerns.map((concern, index) => (
+              <article className={`concernCard reveal revealDelay${Math.min(index % 4, 3)}`} key={concern.title} data-reveal>
+                <Icon name={concern.icon} size={40} />
+                <strong>{concern.title}</strong>
+                <p>{concern.summary}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
 
-          <div className="processCard">
+      <section className="contentSection resourceSection" id="resources">
+        <div className="shell resourceGrid">
+          <article className="resourceCard reveal" data-reveal>
+            <span className="resourceIcon"><Icon name="book" size={29} /></span>
+            <p className="eyebrow">Resources</p>
+            <h2>Clear information for families</h2>
+            <p>Plain-language guidance about developmental paediatrics, appointment preparation and what families may expect from the clinic process.</p>
+            <a className="textLink" href="#faq">Read frequently asked questions <Icon name="arrow" size={18} /></a>
+          </article>
+          <article className="resourceCard reveal revealDelay1" id="international-families" data-reveal>
+            <span className="resourceIcon"><Icon name="location" size={29} /></span>
+            <p className="eyebrow">International families</p>
+            <h2>Enquire before travelling to Singapore</h2>
+            <p>Families living overseas may submit an enquiry for review before arranging travel. The clinic team can advise whether a Singapore appointment may be suitable.</p>
+            <a className="textLink" href="#contact">Contact the clinic <Icon name="arrow" size={18} /></a>
+          </article>
+          <article className="resourceCard reveal revealDelay2" id="schools-professionals" data-reveal>
+            <span className="resourceIcon"><Icon name="people" size={29} /></span>
+            <p className="eyebrow">Schools &amp; professionals</p>
+            <h2>Collaborative support where appropriate</h2>
+            <p>With suitable parent or guardian authorisation, school or professional communication may be considered according to the child&apos;s needs and practical availability.</p>
+            <a className="textLink" href="#contact">Discuss coordination <Icon name="arrow" size={18} /></a>
+          </article>
+        </div>
+      </section>
+
+      <section className="contentSection processArea">
+        <div className="shell storyGrid">
+          <div className="scenePhoto scenePlay reveal" data-reveal role="img" aria-label="Illustrative developmental activity with children; no actual patients shown"><span>Illustrative developmental activity</span></div>
+
+          <div className="processCard reveal revealDelay1" data-reveal>
             <p className="eyebrow">A clear, human-managed process</p>
-            <h2>How It Works</h2>
-            <p>A supportive journey for your child and family. Appointment requests are reviewed before a suitable consultation is arranged.</p>
+            <h2>How an appointment request works</h2>
+            <p>Appointment requests are reviewed before a suitable consultation is arranged because each child and family may require different preparation.</p>
             <div className="steps">
               <div><span>1</span><i><Icon name="calendar" size={27} /></i><strong>Send an Enquiry</strong></div>
               <b><Icon name="arrow" size={21} /></b>
@@ -200,37 +360,53 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="scenePhoto sceneLearning" role="img" aria-label="Illustrative parent and child learning image; approved image loads when supplied">
-            <span>Illustrative parent and child learning</span>
+          <div className="scenePhoto sceneLearning reveal revealDelay2" data-reveal role="img" aria-label="Illustrative parent and child learning activity; no actual patients shown"><span>Illustrative parent and child learning</span></div>
+        </div>
+        <p className="imageDisclaimer shell">Illustrative images; no actual patients shown. Final approved clinic images can replace these staging visuals later.</p>
+      </section>
+
+      <section className="contentSection faqSection" id="faq">
+        <div className="shell faqGrid">
+          <div className="sectionIntro reveal" data-reveal>
+            <p className="eyebrow">Frequently asked questions</p>
+            <h2>Helpful answers before contacting the clinic</h2>
+            <p>These answers provide general information. An individual consultation is needed for advice about a specific child.</p>
+          </div>
+          <div className="faqList">
+            {faqs.map(([question, answer], index) => (
+              <details className={`faqItem reveal revealDelay${Math.min(index % 4, 3)}`} key={question} data-reveal>
+                <summary><span>{question}</span><b>+</b></summary>
+                <p>{answer}</p>
+              </details>
+            ))}
           </div>
         </div>
-        <p className="imageDisclaimer shell">Illustrative image areas; no actual patients shown. Final approved images will replace the staging placeholders.</p>
       </section>
 
       <section className="ctaSection" id="contact">
-        <div className="shell ctaBar">
+        <div className="shell ctaBar reveal" data-reveal>
           <div className="ctaTitle"><span><Icon name="calendar" size={27} /></span><div><strong>Ready to take the next step?</strong><small>Contact the clinic team to discuss an appointment request.</small></div></div>
           <a href="https://wa.me/6596274893" target="_blank" rel="noreferrer" className="contactPill whatsappPill"><Icon name="whatsapp" size={23} /><span>WhatsApp Us</span></a>
           <a href="tel:+6563976637" className="contactPill"><Icon name="phone" size={22} /><span>+65 6397 6637</span></a>
-          <a href="#contactForm" className="contactPill"><Icon name="mail" size={22} /><span>Send an Enquiry</span></a>
-          <a href="#contactForm" className="button buttonPrimary"><Icon name="calendar" size={20} /> Request an Appointment</a>
+          <a href={enquiryUrl} className="contactPill"><Icon name="mail" size={22} /><span>Send an Enquiry</span></a>
+          <a href={enquiryUrl} className="button buttonPrimary"><Icon name="calendar" size={20} /> Request an Appointment</a>
         </div>
       </section>
 
-      <section className="contactDetails" id="contactForm">
-        <div className="shell detailGrid">
+      <section className="contactDetails">
+        <div className="shell detailGrid reveal" data-reveal>
           <article><Icon name="location" size={30} /><div><strong>Novena Medical Center</strong><span>10 Sinaran Drive, #10-12<br />Singapore 307506</span></div></article>
           <article><Icon name="location" size={30} /><div><strong>Near Novena MRT</strong><span>Convenient access by MRT,<br />bus and taxi</span></div></article>
-          <article><Icon name="clock" size={30} /><div><strong>By appointment</strong><span>Clinic arrangements are<br />confirmed by the clinic team</span></div></article>
+          <article><Icon name="clock" size={30} /><div><strong>By appointment</strong><span>Arrangements are confirmed<br />by the clinic team</span></div></article>
           <article><Icon name="phone" size={30} /><div><strong>Contact</strong><span>Telephone: +65 6397 6637<br />WhatsApp: +65 9627 4893</span></div></article>
         </div>
       </section>
 
-      <footer className="siteFooter" id="resources">
+      <footer className="siteFooter">
         <div className="shell footerInner">
-          <div className="footerBrand"><strong>Dr Tammi Quek</strong><span>Developmental &amp; Behavioural Paediatrics Clinic</span></div>
-          <p>General website information does not replace individual medical advice, assessment or emergency care.</p>
-          <div className="footerLinks"><a href="#top">Home</a><a href="#about">About</a><a href="#services">Services</a><a href="#conditions">Concerns</a><a href="#contact">Contact</a></div>
+          <a className="footerBrand" href="#top"><img src="/assets/images/logo.svg" alt="Dr Tammi Quek Clinic" width="260" height="60" /></a>
+          <p>General website information does not replace individual medical advice, assessment, diagnosis, treatment or emergency care.</p>
+          <div className="footerLinks">{navigation.map(([label, href]) => <a key={href} href={href}>{label}</a>)}</div>
           <small>© 2026 Dr Tammi Quek Developmental &amp; Behavioural Paediatrics Clinic.</small>
         </div>
       </footer>
