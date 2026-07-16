@@ -27,7 +27,7 @@ export function SiteFrame({ children }: { children: ReactNode }) {
           <nav className="desktopNav" aria-label="Primary navigation">
             <Link href="/">Home</Link>
             {primaryNavigation.map((item) =>
-              item.items ? (
+              'items' in item && item.items ? (
                 <details className="navDropdown" key={item.label}>
                   <summary>{item.label}<span aria-hidden="true">⌄</span></summary>
                   <div className="navDropdownPanel">
@@ -37,7 +37,7 @@ export function SiteFrame({ children }: { children: ReactNode }) {
                   </div>
                 </details>
               ) : (
-                <Link href={item.href ?? '/'} key={item.label}>{item.label}</Link>
+                <Link href={'href' in item ? item.href : '/'} key={item.label}>{item.label}</Link>
               ),
             )}
           </nav>
@@ -49,7 +49,7 @@ export function SiteFrame({ children }: { children: ReactNode }) {
             <div className="mobilePanel">
               <Link href="/">Home</Link>
               {primaryNavigation.map((item) =>
-                item.items ? (
+                'items' in item && item.items ? (
                   <div className="mobileGroup" key={item.label}>
                     <span>{item.label}</span>
                     {item.items.map((child) => (
@@ -57,7 +57,7 @@ export function SiteFrame({ children }: { children: ReactNode }) {
                     ))}
                   </div>
                 ) : (
-                  <Link href={item.href ?? '/'} key={item.label}>{item.label}</Link>
+                  <Link href={'href' in item ? item.href : '/'} key={item.label}>{item.label}</Link>
                 ),
               )}
               <Link className="mobileCta" href="/contact/">Send an Enquiry</Link>
