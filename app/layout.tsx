@@ -24,7 +24,7 @@ const cormorant = Cormorant_Garamond({
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? SITE.previewUrl;
 const isProduction = process.env.NEXT_PUBLIC_SITE_ENV === 'production';
 const socialImage =
-  process.env.NEXT_PUBLIC_SOCIAL_IMAGE_URL ?? '/assets/images/social-share.svg';
+  process.env.NEXT_PUBLIC_SOCIAL_IMAGE_URL ?? '/assets/brand/dr-tammi-logo-new.png';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -74,8 +74,6 @@ export const metadata: Metadata = {
     images: [
       {
         url: socialImage,
-        width: 1200,
-        height: 630,
         alt: 'Dr Tammi Quek Developmental and Behavioural Paediatrics Clinic in Singapore',
       },
     ],
