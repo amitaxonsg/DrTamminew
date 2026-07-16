@@ -5,6 +5,7 @@ import { RevealProvider } from './components/reveal-provider';
 import { SiteFrame } from './components/site-frame';
 import { SITE } from './lib/site';
 import './globals.css';
+import './forms.css';
 
 const manrope = Manrope({
   subsets: ['latin'],
